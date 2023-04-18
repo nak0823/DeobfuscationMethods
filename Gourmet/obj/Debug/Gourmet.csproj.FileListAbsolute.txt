@@ -1,0 +1,12 @@
+C:\Users\AnotherPC\source\repos\Gourmet\obj\Debug\Gourmet.csproj.AssemblyReference.cache
+C:\Users\AnotherPC\source\repos\Gourmet\obj\Debug\Gourmet.csproj.SuggestedBindingRedirects.cache
+C:\Users\AnotherPC\source\repos\Gourmet\obj\Debug\Gourmet.csproj.CoreCompileInputs.cache
+C:\Users\AnotherPC\source\repos\Gourmet\bin\Debug\Gourmet.exe.config
+C:\Users\AnotherPC\source\repos\Gourmet\bin\Debug\Gourmet.exe
+C:\Users\AnotherPC\source\repos\Gourmet\bin\Debug\Gourmet.pdb
+C:\Users\AnotherPC\source\repos\Gourmet\bin\Debug\dnlib.dll
+C:\Users\AnotherPC\source\repos\Gourmet\bin\Debug\dnlib.xml
+C:\Users\AnotherPC\source\repos\Gourmet\obj\Debug\Gourmet.csproj.CopyComplete
+C:\Users\AnotherPC\source\repos\Gourmet\obj\Debug\Gourmet.exe
+C:\Users\AnotherPC\source\repos\Gourmet\obj\Debug\Gourmet.pdb
+C:\Users\AnotherPC\source\repos\Gourmet\bin\Debug\Colorful.Console.dll
