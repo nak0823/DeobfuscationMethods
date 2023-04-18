@@ -26,13 +26,13 @@ namespace Gourmet.Pipeline.Metadata.Remover
                 }
             }
 
-            switch (RemovedInterfaces)
+            switch (Detected)
             {
-                case 0:
+                case false:
                     Utilities.Logger.Log("!", $"AntiDe4dot protection has not been found!", Color.Red);
                     break;
 
-                default:
+                case true:
                     Utilities.Logger.Log("!", $"Successfully removed {RemovedInterfaces} invalid interfaces!", Color.Green);
                     break;
             }

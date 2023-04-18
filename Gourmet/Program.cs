@@ -2,6 +2,8 @@
 using dnlib.DotNet.Writer;
 using Gourmet.Core;
 using System;
+using System.Drawing;
+using Gourmet.Utilities;
 
 namespace Gourmet
 {
@@ -17,7 +19,14 @@ namespace Gourmet
             AssemblyDef assembly = AssemblyDef.Load(args[0]);
             Context ctx = new Context(assembly);
 
-            Pipeline.Metadata.Remover.AntiDe4dot.Remove(ctx);
+            try
+            {
+                Pipeline.Metadata.Remover.AntiDump.Remover(ctx);
+            }
+            catch (Exception exc)
+            {
+                Logger.Log("!", $"Panic! Error: {exc}", Color.Purple);
+            }
 
             var Options = new ModuleWriterOptions(assembly.ManifestModule);
             Options.Logger = DummyLogger.NoThrowInstance;
