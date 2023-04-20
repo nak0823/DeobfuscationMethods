@@ -21,7 +21,7 @@ namespace Gourmet
 
             try
             {
-                Pipeline.Metadata.Remover.AntiDump.Remover(ctx);
+                Pipeline.Decryption.Fixer.StringDecrypt.Remover(ctx);
             }
             catch (Exception exc)
             {

@@ -51,6 +51,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\Context.cs" />
+    <Compile Include="Pipeline\Decryption\Fixer\EncodeFixer.cs" />
+    <Compile Include="Pipeline\Decryption\Fixer\IntDecrypt.cs" />
+    <Compile Include="Pipeline\Decryption\Fixer\MeltingFixer.cs" />
+    <Compile Include="Pipeline\Decryption\Fixer\StringDecrypt.cs" />
+    <Compile Include="Pipeline\Metadata\Fixer\InvalidMD.cs" />
     <Compile Include="Pipeline\Metadata\Remover\AntiIldasm.cs" />
     <Compile Include="Pipeline\Metadata\Remover\AntiDnspy.cs" />
     <Compile Include="Pipeline\Metadata\Remover\AntiDe4dot.cs" />
@@ -70,8 +75,6 @@
   <ItemGroup>
     <Folder Include="Helper\" />
     <Folder Include="Pipeline\Controlflow\" />
-    <Folder Include="Pipeline\Decryption\" />
-    <Folder Include="Pipeline\Metadata\Fixer\" />
     <Folder Include="Pipeline\Reflection\" />
     <Folder Include="Pipeline\Unpacker\" />
   </ItemGroup>

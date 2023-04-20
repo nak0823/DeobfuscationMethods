@@ -12,30 +12,37 @@ namespace Gourmet.Pipeline.Metadata.Remover
 
         public static void Remover(Context ctx)
         {
-            foreach (var typeDef in ctx.moduleDef.Types.ToList())
+            try
             {
-                foreach (var methodDef in typeDef.Methods.ToList())
+                foreach (var typeDef in ctx.moduleDef.Types.ToList())
                 {
+                    foreach (var methodDef in typeDef.Methods.ToList())
+                    {
 
-                    if (methodDef.Body.Instructions.Count <= 1)
-                    { 
-                        Instruction instr = methodDef.Body.Instructions[0];
-
-                        if (instr.OpCode.Code == Code.Ldfld)
+                        if (methodDef.Body.Instructions.Count <= 1)
                         {
-                            Detected = true;
-                            Junk++;
-                            typeDef.Methods.Remove(methodDef);
-                        }
+                            Instruction instr = methodDef.Body.Instructions[0];
 
-                        if (!methodDef.HasBody)
-                        {
-                            Detected = true;
-                            Junk++;
-                            typeDef.Methods.Remove(methodDef);
+                            if (instr.OpCode.Code == Code.Ldfld)
+                            {
+                                Detected = true;
+                                Junk++;
+                                typeDef.Methods.Remove(methodDef);
+                            }
+
+                            if (!methodDef.HasBody)
+                            {
+                                Detected = true;
+                                Junk++;
+                                typeDef.Methods.Remove(methodDef);
+                            }
                         }
                     }
                 }
+            }
+            catch
+            {
+
             }
 
             switch (Detected)

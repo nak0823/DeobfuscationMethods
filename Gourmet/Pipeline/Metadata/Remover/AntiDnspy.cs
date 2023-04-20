@@ -1,4 +1,5 @@
-﻿using dnlib.DotNet.Emit;
+﻿using System;
+using dnlib.DotNet.Emit;
 using Gourmet.Core;
 using System.Collections.Generic;
 using System.Drawing;
@@ -10,38 +11,45 @@ namespace Gourmet.Pipeline.Metadata.Remover
         private static bool Detected = false;
         private static int RemovedNops = 0;
 
-        public static void Remove(Context ctx)
+        public static void Remover(Context ctx)
         {
-            foreach (var typeDef in ctx.moduleDef.Types)
+            try
             {
-                foreach (var methodDef in typeDef.Methods)
+                foreach (var typeDef in ctx.moduleDef.Types)
                 {
-                    List<Instruction> InvalidNops = new List<Instruction>();
-
-                    for (int i = 0; i < methodDef.Body.Instructions.Count; i++)
+                    foreach (var methodDef in typeDef.Methods)
                     {
-                        Instruction Instr = methodDef.Body.Instructions[i];
+                        List<Instruction> InvalidNops = new List<Instruction>();
 
-                        if (Instr.OpCode == OpCodes.Nop)
+                        for (int i = 0; i < methodDef.Body.Instructions.Count; i++)
                         {
-                            InvalidNops.Add(Instr);
-                        }
-                        else
-                        {
-                            break; // Break at the first instruction that is not a NOP.
-                        }
-                    }
+                            Instruction Instr = methodDef.Body.Instructions[i];
 
-                    if (InvalidNops.Count >= 12) // Remove the Nops when bigger than 12.
-                    {
-                        Detected = true;
-                        for (int i = InvalidNops.Count - 1; i >= 0; i--)
+                            if (Instr.OpCode == OpCodes.Nop)
+                            {
+                                InvalidNops.Add(Instr);
+                            }
+                            else
+                            {
+                                break; // Break at the first instruction that is not a NOP.
+                            }
+                        }
+
+                        if (InvalidNops.Count >= 12) // Remove the Nops when bigger than 12.
                         {
-                            RemovedNops++;
-                            methodDef.Body.Instructions.RemoveAt(i);
+                            Detected = true;
+                            for (int i = InvalidNops.Count - 1; i >= 0; i--)
+                            {
+                                RemovedNops++;
+                                methodDef.Body.Instructions.RemoveAt(i);
+                            }
                         }
                     }
                 }
+            }
+            catch
+            {
+
             }
 
             switch (Detected)

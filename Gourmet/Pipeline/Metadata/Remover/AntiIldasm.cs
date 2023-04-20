@@ -9,7 +9,7 @@ namespace Gourmet.Pipeline.Metadata.Remover
     {
         private static bool Detected = false;
 
-        public static void Remove(Context ctx)
+        public static void Remover(Context ctx)
         {
             foreach (var typeDef in ctx.moduleDef.Types)
             {

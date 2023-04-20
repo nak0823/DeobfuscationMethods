@@ -12,39 +12,50 @@ namespace Gourmet.Pipeline.Metadata.Remover
 
         public static void Remover(Context ctx) // This is useless to remove when you think about it. Still included.
         {
-            foreach (var typeDef in ctx.moduleDef.Types.ToList())
+            try
             {
-                foreach (var methodDef in typeDef.Methods.ToList())
+                foreach (var typeDef in ctx.moduleDef.Types.ToList())
                 {
-                    if (methodDef.Body != null)
+                    foreach (var methodDef in typeDef.Methods.ToList())
                     {
-                        foreach (var instruction in methodDef.Body.Instructions)
+                        if (methodDef.Body != null)
                         {
-                            if (instruction.OpCode == OpCodes.Call && instruction.Operand is MethodDef targetMethod && targetMethod.Name == "VirtualProtect" && methodDef.Body.Instructions.Count > 2)
+                            foreach (var instruction in methodDef.Body.Instructions)
                             {
-                                Detected = true;
-                                typeDef.Methods.Remove(methodDef);
-
-                                // Now remove the call from cctor
-                                var methodName = methodDef.Name;
-                                var cctor = typeDef.FindOrCreateStaticConstructor();
-
-                                for (int i = 0; i < cctor.Body.Instructions.Count; i++)
+                                if (instruction.OpCode == OpCodes.Call &&
+                                    instruction.Operand is MethodDef targetMethod &&
+                                    targetMethod.Name == "VirtualProtect" && methodDef.Body.Instructions.Count > 2)
                                 {
-                                    var instr = cctor.Body.Instructions[i];
+                                    Detected = true;
+                                    typeDef.Methods.Remove(methodDef);
 
-                                    if (instr.OpCode == OpCodes.Call && instr.Operand is MethodDef cctorCallMethod && cctorCallMethod.Name == methodName)
+                                    // Now remove the call from cctor
+                                    var methodName = methodDef.Name;
+                                    var cctor = typeDef.FindOrCreateStaticConstructor();
+
+                                    for (int i = 0; i < cctor.Body.Instructions.Count; i++)
                                     {
-                                        cctor.Body.Instructions.RemoveAt(i);
-                                        i--;
-                                    }
-                                }
+                                        var instr = cctor.Body.Instructions[i];
 
-                                break;
+                                        if (instr.OpCode == OpCodes.Call &&
+                                            instr.Operand is MethodDef cctorCallMethod &&
+                                            cctorCallMethod.Name == methodName)
+                                        {
+                                            cctor.Body.Instructions.RemoveAt(i);
+                                            i--;
+                                        }
+                                    }
+
+                                    break;
+                                }
                             }
                         }
                     }
                 }
+            }
+            catch
+            {
+
             }
 
             switch (Detected)

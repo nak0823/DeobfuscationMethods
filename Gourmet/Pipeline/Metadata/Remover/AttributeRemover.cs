@@ -43,18 +43,28 @@ namespace Gourmet.Pipeline.Metadata.Remover
 
         public static void Remover(Context ctx)
         {
-            foreach (var typeDef in ctx.moduleDef.Types.ToList())
+            try
             {
-                bool hasAttribute = typeDef.CustomAttributes.Any(attrib => attrib.AttributeType.FullName == "System.Attribute");
-                bool hasInheritedAttribute = typeDef.BaseType != null && typeDef.BaseType.FullName == "System.Attribute";
-
-                if (FakeAttribs.Contains(typeDef.Name) && hasAttribute || hasInheritedAttribute)
+                foreach (var typeDef in ctx.moduleDef.Types.ToList())
                 {
-                    Detected = true;
-                    Attributes++;
-                    ctx.moduleDef.Types.Remove(typeDef);
+                    bool hasAttribute =
+                        typeDef.CustomAttributes.Any(attrib => attrib.AttributeType.FullName == "System.Attribute");
+                    bool hasInheritedAttribute =
+                        typeDef.BaseType != null && typeDef.BaseType.FullName == "System.Attribute";
+
+                    if (FakeAttribs.Contains(typeDef.Name) && hasAttribute || hasInheritedAttribute)
+                    {
+                        Detected = true;
+                        Attributes++;
+                        ctx.moduleDef.Types.Remove(typeDef);
+                    }
                 }
             }
+            catch
+            {
+
+            }
+
 
             switch (Detected)
             {

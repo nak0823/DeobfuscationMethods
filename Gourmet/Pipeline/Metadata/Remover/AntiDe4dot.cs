@@ -1,4 +1,5 @@
-﻿using Gourmet.Core;
+﻿using System;
+using Gourmet.Core;
 using System.Drawing;
 using System.Linq;
 
@@ -9,21 +10,30 @@ namespace Gourmet.Pipeline.Metadata.Remover
         private static bool Detected = false;
         private static int RemovedInterfaces = 0;
 
-        public static void Remove(Context ctx)
+        public static void Remover(Context ctx)
         {
-            foreach (var typeDef in ctx.moduleDef.Types.ToList())
+            try
             {
-                bool hasAttribute = typeDef.CustomAttributes.Any(attrib => attrib.AttributeType.FullName == "System.Attribute");
-                bool hasInheritedAttribute = typeDef.BaseType != null && typeDef.BaseType.FullName == "System.Attribute";
-                bool isEmptyClass = !typeDef.Fields.Any() && !typeDef.HasEvents && !typeDef.Methods.Any();
-
-                if (hasAttribute || hasInheritedAttribute && isEmptyClass)
+                foreach (var typeDef in ctx.moduleDef.Types.ToList())
                 {
-                    Detected = true;
-                    RemovedInterfaces++;
-                    ctx.moduleDef.Types.Remove(typeDef);
-                    Utilities.Logger.Log("!", $"Removed invalid interface {typeDef.Name}", Color.Aqua);
+                    bool hasAttribute =
+                        typeDef.CustomAttributes.Any(attrib => attrib.AttributeType.FullName == "System.Attribute");
+                    bool hasInheritedAttribute =
+                        typeDef.BaseType != null && typeDef.BaseType.FullName == "System.Attribute";
+                    bool isEmptyClass = !typeDef.Fields.Any() && !typeDef.HasEvents && !typeDef.Methods.Any();
+
+                    if (hasAttribute || hasInheritedAttribute && isEmptyClass)
+                    {
+                        Detected = true;
+                        RemovedInterfaces++;
+                        ctx.moduleDef.Types.Remove(typeDef);
+                        Utilities.Logger.Log("!", $"Removed invalid interface {typeDef.Name}", Color.Aqua);
+                    }
                 }
+            }
+            catch
+            {
+
             }
 
             switch (Detected)
